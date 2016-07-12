@@ -30,17 +30,23 @@ export default {
       return val
     }
 
+    function getArrayValue () {
+      var arr = self._watcher.get().slice()
+      var val = self.getValue()
+      if (el.checked) {
+        if (indexOf(arr, val) < 0) {
+          arr.push(val)
+        }
+      } else {
+        arr.$remove(val)
+      }
+      return arr
+    }
+
     this.listener = function () {
       var model = self._watcher.value
       if (isArray(model)) {
-        var val = self.getValue()
-        if (el.checked) {
-          if (indexOf(model, val) < 0) {
-            model.push(val)
-          }
-        } else {
-          model.$remove(val)
-        }
+        self._watcher.set(getArrayValue())
       } else {
         self.set(getBooleanValue())
       }
